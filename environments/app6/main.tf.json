@@ -1,0 +1,25 @@
+{
+    "resource": [
+        {
+            "null_resource": [
+                {
+                    "app6": [
+                        {
+                            "provisioner": [
+                                {
+                                    "local-exec": {
+                                        "command": "echo 'Arrancando servidor app6 en red net6'"
+                                    }
+                                }
+                            ],
+                            "triggers": {
+                                "name": "app6",
+                                "network": "net6"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

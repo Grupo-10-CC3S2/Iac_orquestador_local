@@ -1,0 +1,25 @@
+{
+    "resource": [
+        {
+            "null_resource": [
+                {
+                    "app8": [
+                        {
+                            "provisioner": [
+                                {
+                                    "local-exec": {
+                                        "command": "echo 'Arrancando servidor app8 en red net8'"
+                                    }
+                                }
+                            ],
+                            "triggers": {
+                                "name": "app8",
+                                "network": "net8"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

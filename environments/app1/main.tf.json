@@ -1,0 +1,25 @@
+{
+    "resource": [
+        {
+            "null_resource": [
+                {
+                    "app1": [
+                        {
+                            "provisioner": [
+                                {
+                                    "local-exec": {
+                                        "command": "echo 'Arrancando servidor app1 en red ${var.network}'"
+                                    }
+                                }
+                            ],
+                            "triggers": {
+                                "name": "app1",
+                                "network": "${var.network}"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

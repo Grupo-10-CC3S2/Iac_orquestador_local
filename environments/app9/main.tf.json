@@ -1,0 +1,25 @@
+{
+    "resource": [
+        {
+            "null_resource": [
+                {
+                    "app9": [
+                        {
+                            "provisioner": [
+                                {
+                                    "local-exec": {
+                                        "command": "echo 'Arrancando servidor app9 en red net9'"
+                                    }
+                                }
+                            ],
+                            "triggers": {
+                                "name": "app9",
+                                "network": "net9"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

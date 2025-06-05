@@ -1,0 +1,25 @@
+{
+    "resource": [
+        {
+            "null_resource": [
+                {
+                    "app2": [
+                        {
+                            "provisioner": [
+                                {
+                                    "local-exec": {
+                                        "command": "echo 'Arrancando servidor app2 en red net2'"
+                                    }
+                                }
+                            ],
+                            "triggers": {
+                                "name": "app2",
+                                "network": "net2"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

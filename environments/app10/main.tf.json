@@ -1,0 +1,25 @@
+{
+    "resource": [
+        {
+            "null_resource": [
+                {
+                    "app10": [
+                        {
+                            "provisioner": [
+                                {
+                                    "local-exec": {
+                                        "command": "echo 'Arrancando servidor app10 en red net10'"
+                                    }
+                                }
+                            ],
+                            "triggers": {
+                                "name": "app10",
+                                "network": "net10"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

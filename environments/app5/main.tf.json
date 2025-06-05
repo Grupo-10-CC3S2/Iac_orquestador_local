@@ -1,0 +1,25 @@
+{
+    "resource": [
+        {
+            "null_resource": [
+                {
+                    "app5": [
+                        {
+                            "provisioner": [
+                                {
+                                    "local-exec": {
+                                        "command": "echo 'Arrancando servidor app5 en red net5'"
+                                    }
+                                }
+                            ],
+                            "triggers": {
+                                "name": "app5",
+                                "network": "net5"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

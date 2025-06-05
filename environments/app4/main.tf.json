@@ -1,0 +1,25 @@
+{
+    "resource": [
+        {
+            "null_resource": [
+                {
+                    "app4": [
+                        {
+                            "provisioner": [
+                                {
+                                    "local-exec": {
+                                        "command": "echo 'Arrancando servidor app4 en red net4'"
+                                    }
+                                }
+                            ],
+                            "triggers": {
+                                "name": "app4",
+                                "network": "net4"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
