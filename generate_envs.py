@@ -1,10 +1,6 @@
 import os, json
 from shutil import copyfile
 
-# Parámetros de ejemplo para N entornos
-ENVS = [
-    {"name": f"app{i}", "network": f"net{i}"} for i in range(1, 11)
-]
 
 MODULE_DIR = "modules/simulated_app"
 OUT_DIR    = "environments"
@@ -29,14 +25,14 @@ def render_and_write(env):
                             {
                                 "triggers": {
                                     "name":    env["name"],
-                                    "network": env["network"]
+                                    "network": "${var.network}"
                                 },
                                 "provisioner": [
                                     {
                                         "local-exec": {
                                             "command": (
-                                                f"echo 'Arrancando servidor "
-                                                f"{env['name']} en red {env['network']}'"
+                                                f"echo 'Arrancando servidor {env['name']}"
+                                                " en red ${var.network}'"
                                             )
                                         }
                                     }
@@ -53,11 +49,15 @@ def render_and_write(env):
         json.dump(config, fp, sort_keys=True, indent=4)
 
 if __name__ == "__main__":
+    """
     # Limpia entornos viejos (si quieres)
     if os.path.isdir(OUT_DIR):
         import shutil
         shutil.rmtree(OUT_DIR)
+    """
 
+    # Ejercicio 1: El unico directorio en donde se aplican los cambios
+    ENVS = [{"name": "app1"}]
     for env in ENVS:
         render_and_write(env)
     print(f"Generados {len(ENVS)} entornos en '{OUT_DIR}/'")
