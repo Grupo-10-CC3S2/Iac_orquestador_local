@@ -5,7 +5,7 @@
                 {
                     "type": "string",
                     "default": "prueba para fase 3",
-                    "description": "Nombre del servidor local"
+                    "description": "Nombre del servidor local (fase 3)"
                 }
             ]
         },
