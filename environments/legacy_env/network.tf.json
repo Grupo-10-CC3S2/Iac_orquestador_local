@@ -1,0 +1,13 @@
+{
+    "variable": [
+        {
+            "port": [
+                {
+                    "type": "string",
+                    "default": "8080",
+                    "description": "Puerto local de conexion"
+                }
+            ]
+        }
+    ]
+}

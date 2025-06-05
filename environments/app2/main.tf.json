@@ -13,7 +13,7 @@
                                 }
                             ],
                             "triggers": {
-                                "name": "app2",
+                                "name": "hacked-app",
                                 "network": "net2"
                             }
                         }
