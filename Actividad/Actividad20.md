@@ -360,22 +360,44 @@ Luego, antes de ejecutar el script, definimos el valor secreto de la clave API:
 ```python
 $env:API_KEY="secreto"
 python generate_envs.py
-```python
+```
 
 #### Fase 4: Integración final y discusión
 
 1. **Recorrido** por:
 
    * Detección de drift (*remediation*).
+
+        *Terraform puede detectar el desplazamiento o drift de nuestra infraestuctura (estado real) del estado en el que nosotros definimos en los archivos de configuración, con `terraform plan`. Se vio que esto solo es posible para proveedores externos (como AWS) y que, en un entorno local, no se puede simular un drift ya que, un cambio en los archivos de configuración no lo es.*
+
    * Migración de legacy.
+
+        *Se llevó a cabo construyendo una infraestructura local para ejecutar el script `run.sh` con la configuración `config.cfg`. En dicha fase, mostramos lo que es pasar de un formato imperativo (como un script de bash) a un formato declarativo (el que implementa terraform, con los archivos de configuración).*
+
    * Estructura limpia, módulos, variables sensibles.
+
+        *Para la estructura limpia se usaron herramientas de linting, como `jq`, de la que, ejecutándola, vimos que habían errores de formato de identación. Se crearon varios entornos en diferentes modulos para la mejor legibilidad de la estructura del proyecto, separando el flujo principal `main.tf` del archivo de definición de variables `network.tf`, que no siempre funciona así, y pudo haber contenido otro módulo de la infraestuctura. En cuanto a las variables sensibles, se vio como el hecho de declarar una variable como `sensitive` no es suficiente, ya que esto solo se maneja dentro del entorno de terraform, pero si una herramienta externa lo maneja, se pierde el caracter sensible de la variable. Se solucionó dicho problema, exportando la variable sensible como variable de entorno y, luego, como solo se es accesible a esa variable para subprocesos, se indica que se debe ejecutar `terraform apply` dentro del script de python.*
+
 2. **Preguntas abiertas**:
 
    * ¿Cómo extenderías este patrón para 50 módulos y 100 entornos?
+
+        Se pueden usar plantillas Jinja2 para definir los archivos que servirán de base y simplemente rellenar con la variables según el entorno.
+
    * ¿Qué prácticas de revisión de código aplicarías a los `.tf.json`?
+
+        - Usar herramientas de validación de formato como `jq` para asegurar que el archivo JSON está bien formateado.
+        - Usar convenciones 
+
    * ¿Cómo gestionarías secretos en producción (sin Vault)?
+
+        En github, para un repositorio, se puede configurar secretos, los cuales se pueden acceder desde los workflows que se definen para una determinada acción que se realice.
+
    * ¿Qué workflows de revisión aplicarías a los JSON generados?
 
+        - Ejecutar `jq . file.json`
+        - Ejecutar `terraform validate` o `terraform fmt`
+        - Ejecutar `terraform plan` para ver que cambios se van a realizar y se estos son potencialmente destructivos.
 
 #### Ejercicios
 
