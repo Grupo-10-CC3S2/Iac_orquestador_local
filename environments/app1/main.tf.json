@@ -3,12 +3,12 @@
         {
             "null_resource": [
                 {
-                    "app1": [
+                    "local_server": [
                         {
                             "provisioner": [
                                 {
                                     "local-exec": {
-                                        "command": "echo 'Arrancando servidor app1 en red ${var.network}'"
+                                        "command": "echo 'Arrancando servidor app1 en red ${var.network} en el puerto ${var.port}'"
                                     }
                                 }
                             ],
