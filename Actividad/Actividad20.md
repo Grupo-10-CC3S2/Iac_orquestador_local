@@ -148,15 +148,11 @@ Cuando cambian variables de configuración, Terraform los mapea a **triggers** q
    ```bash
    terraform plan
    ```
+   Verás un plan que propone **revertir** ese cambio.
 
-    Verás un plan que propone **revertir** ese cambio.
-3. **Aplica**
+   ![](Imagenes/3.png)
 
-   ```bash
-   terraform apply
-   ```
-    Y comprueba que vuelve a "app2".
-   
+   *No se proporciona un plan que pretende revertir el cambio debido a que, al modificar el archivo de configuración, no estamos simulando un drift real. Para simularlo, debemos modificar una infraestructura gestionada por Terraform, pero fuera de él. Por ejemplo, si modificamos el nombre de un bucket de AWS luego de haber realizado `terraform apply`, terraform detectará el drift al ejecutar `terraform plan` y propondrá corregirlo para que coincida con la configuración. En ningún momento este último cambia.*
 
 #### B. Migrando a IaC
 
@@ -173,7 +169,15 @@ Cuando cambian variables de configuración, Terraform los mapea a **triggers** q
 
      * Lea `config.cfg` y `run.sh`.
      * Genere **automáticamente** un par `network.tf.json` + `main.tf.json` equivalente.
+
+         *Ver el archivo `legacy.py`*
+
      * Verifique con `terraform plan` que el resultado es igual al script legacy.
+
+         ![](Imagenes/4.png)
+         *Cuando realizamos el `terraform apply`, podemos ver que se imprime "Arrancando 8080", lo mismo que hace el script `run.sh`*
+         ![](Imagenes/5.png)
+
 
 #### Fase 3: Escribiendo código limpio en IaC 
 
