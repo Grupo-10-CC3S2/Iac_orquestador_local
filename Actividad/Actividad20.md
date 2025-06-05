@@ -190,6 +190,178 @@ Cuando cambian variables de configuración, Terraform los mapea a **triggers** q
 | **Parametrizar dependencias**              | - Genera `env3` de modo que su `network` dependa de `env2` (p.ej. `net2-peered`). Implementarlo en Python.    |
 | **Mantener en secreto**                    | - Marca `api_key` como **sensitive** en el JSON y leerla desde `os.environ`, sin volcarla en disco.           |
 
+**Ejercicio 1:**
+
+Ejecutando `git log` para ver los cambios:
+
+![](Imagenes/6.png)
+
+**Ejercicio 2:**
+
+Ejecutando el comando mencionado, se puede ver que cambia la identación de `network.tf.json`.
+
+![](Imagenes/7.png)
+
+**Ejercicio 3:**
+
+En `generate_env.py`:
+
+```python
+...
+config = {
+    "resource": [
+        {
+            "null_resource": [
+                {
+                    "local_server": [
+                        ...
+                    ]
+                }
+                ...
+            ]
+        }
+    ]
+}
+```
+
+En `module/simulated_app`:
+
+```json
+{
+  "resource": [
+    {
+      "null_resource": [ //
+        {
+          "local-server": [
+            {
+              "triggers": {
+                "name": "${var.name}",
+                "network": "${var.network}"
+              },
+              "provisioner": [
+                {
+                  "local-exec": {
+                    "command": "echo 'Arrancando servidor ${var.name} en red ${var.network} en el puerto ${var.port}'"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+**Ejercicio 4**
+
+En `modules/simulated_app/network.tf.json`:
+
+```json
+{
+    "port": [
+        {
+        "type": "number",
+        "default": "8080",
+        "description": "Puerto del servidor local"
+        }
+    ]
+}
+``` 
+
+En `generate_environment.py`:
+
+```python
+{
+    "local-exec": {
+        "command": (
+            f"echo 'Arrancando servidor {env['name']}"
+            " en red ${var.network} en el puerto ${var.port}'"
+        )
+    }
+}
+```
+
+**Ejercicio 5**
+
+En `generate_environments.py`:
+
+```python
+config = {
+    "resource": [
+        {
+            "null_resource": [
+                {
+                    "local_server": [
+                        {
+                            "triggers": {
+                                "name":    env["name"],
+                                "network": env['network']
+                            },
+                            "provisioner": [
+                                {
+                                    "local-exec": {
+                                        "command": (
+                                            f"echo 'Arrancando servidor {env['name']} en red {env['network']}"
+                                            " en el puerto ${var.port}'"
+                                        )
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+
+...
+
+if __name__ == "__main__":
+    ENVS = [
+        {"name": "env2", "network": "net2"},
+        {"name": "env3", "network": "net2-peered"}       
+    ]
+    ...
+```
+
+**Ejercicio 6**
+
+En `modules/simulated_app/network.tf.json`:
+
+```json
+{
+    "api_key": [
+        {
+            "type": "string",
+            "description": "Clave API",
+            "sensitive": true
+        }
+    ]
+}
+```
+
+Para lograr que no sea volcado en el disco (es decir, no se escriba el valor en ingun archivo), podemos leer el valor desde una variable de entorno y luego ejecutar comandos de terraform en subprocesos del script de python.
+
+```python
+api_key = os.environ.get("API_KEY")
+if not api_key:
+    raise Exception("La variable de entorno API_KEY no está definida.")
+
+os.environ["TF_VAR_api_key"] = api_key
+
+subprocess.run(["terraform", "apply"], cwd="environments/app1")
+```
+
+Luego, antes de ejecutar el script, definimos el valor secreto de la clave API:
+
+```python
+$env:API_KEY="secreto"
+python generate_envs.py
+```python
+
 #### Fase 4: Integración final y discusión
 
 1. **Recorrido** por:
