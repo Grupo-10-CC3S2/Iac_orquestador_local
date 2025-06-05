@@ -1,6 +1,6 @@
 import os, json
 from shutil import copyfile
-
+import subprocess
 
 MODULE_DIR = "modules/simulated_app"
 OUT_DIR    = "environments"
@@ -8,6 +8,16 @@ OUT_DIR    = "environments"
 def render_and_write(env):
     env_dir = os.path.join(OUT_DIR, env["name"])
     os.makedirs(env_dir, exist_ok=True)
+
+    """
+    api_key = os.environ.get("API_KEY")
+    if not api_key:
+        raise Exception("La variable de entorno API_KEY no está definida.")
+    
+    os.environ["TF_VAR_api_key"] = api_key
+
+    subprocess.run(["terraform", "apply"], cwd="environments/app1")
+    """
 
     # 1) Copia la definición de variables (network.tf.json)
     copyfile(
@@ -21,18 +31,18 @@ def render_and_write(env):
             {
                 "null_resource": [
                     {
-                        env["name"]: [
+                        "local_server": [
                             {
                                 "triggers": {
                                     "name":    env["name"],
-                                    "network": "${var.network}"
+                                    "network": env['network']
                                 },
                                 "provisioner": [
                                     {
                                         "local-exec": {
                                             "command": (
-                                                f"echo 'Arrancando servidor {env['name']}"
-                                                " en red ${var.network}'"
+                                                f"echo 'Arrancando servidor {env['name']} en red {env['network']}"
+                                                " en el puerto ${var.port}'"
                                             )
                                         }
                                     }
@@ -57,7 +67,10 @@ if __name__ == "__main__":
     """
 
     # Ejercicio 1: El unico directorio en donde se aplican los cambios
-    ENVS = [{"name": "app1"}]
+    ENVS = [
+        {"name": "env2", "network": "net2"},
+        {"name": "env3", "network": "net2-peered"}       
+    ]
     for env in ENVS:
         render_and_write(env)
     print(f"Generados {len(ENVS)} entornos en '{OUT_DIR}/'")
