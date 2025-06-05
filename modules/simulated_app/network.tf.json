@@ -13,7 +13,7 @@
             "network": [
                 {
                     "type": "string",
-                    "default": "local-network",
+                    "default": "lab-net",
                     "description": "Nombre de la red local"
                 }
             ]
