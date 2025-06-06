@@ -413,6 +413,7 @@ python generate_envs.py
 
    Ejecutamos "terraform plan" para ver la respuesta de terraform ante este cambio
    ![](Imagenes/e1.3.png)
+
    Esto significa que terraform detecto que local-server-1 ha cambiado (drift) y como load_balancer depende de él, tambien quedo afectado.
 
 2. **CLI Interactiva**
@@ -423,6 +424,11 @@ python generate_envs.py
      python generate_envs.py --count 3 --prefix staging --port 3000
      ```
 
+    Refactorizamos generate_envs.py para ser totalmente CLI y crear entornos
+    ![](Imagenes/e2.1.png)
+    Ejecutamos el generate_envs.py refactorizado 
+    ![](Imagenes/e2.2.png)
+    
 3. **Validación de Esquema JSON**
 
    * Diseña un JSON Schema que valide la estructura de ambos TF files.
