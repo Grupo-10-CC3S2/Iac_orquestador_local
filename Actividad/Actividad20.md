@@ -405,6 +405,16 @@ python generate_envs.py
 
    * Crea un recurso "load\_balancer" que dependa de dos `local_server`. Simula drift en uno de ellos y observa el plan.
 
+   Creamos los recursos
+   ![](Imagenes/e1.1.png)
+
+   Abrimos terraform.tfstate y modificamos valores del recurso local-server-1
+   ![](Imagenes/e1.2.png)
+
+   Ejecutamos "terraform plan" para ver la respuesta de terraform ante este cambio
+   ![](Imagenes/e1.3.png)
+   Esto significa que terraform detecto que local-server-1 ha cambiado (drift) y como load_balancer depende de él, tambien quedo afectado.
+
 2. **CLI Interactiva**
 
    * Refactoriza `generate_envs.py` con `click` para aceptar:

@@ -17,6 +17,51 @@
                 }
               ]
             }
+          ],
+          "local-server-1": [
+            {
+              "triggers": {
+                "name": "servidor1",
+                "network": "${var.network}"
+              },
+              "provisioner": [
+                {
+                  "local-exec": {
+                    "command": "echo 'Arrancando servidor1 en red ${var.network} en el puerto ${var.port}'"
+                  }
+                }
+              ]
+            }
+          ],
+          "local-server-2": [
+            {
+              "triggers": {
+                "name": "${var.name}",
+                "network": "${var.network}"
+              },
+              "provisioner": [
+                {
+                  "local-exec": {
+                    "command": "echo 'Arrancando servidor2 en red ${var.network} en el puerto ${var.port}'"
+                  }
+                }
+              ]
+            }
+          ],
+          "load-balancer": [
+            {
+              "depends_on": [
+                "null_resource.local-server-1",
+                "null_resource.local-server-2"
+              ],
+              "provisioner": [
+                {
+                  "local-exec": {
+                    "command": "echo 'Configurando load balancer para servidor1 y servidor2'"
+                  }
+                }
+              ]
+            }
           ]
         }
       ]

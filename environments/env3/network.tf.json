@@ -26,6 +26,15 @@
           "description": "Puerto del servidor local"
         }
       ]
+    },
+    {
+      "api_key": [
+        {
+          "type": "string",
+          "description": "Clave API",
+          "sensitive": true
+        }
+      ]
     }
   ]
 }
